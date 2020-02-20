@@ -35,7 +35,23 @@
       <el-container>
         <el-aside width="200px">Aside</el-aside>
         <el-container>
-          <el-main>Main</el-main>
+          <el-main>
+            <el-table style="width: 100%">
+              <el-table-column prop="date" label="编号" width="180">
+              </el-table-column>
+              <el-table-column prop="name" label="标题" width="180">
+              </el-table-column>
+              <el-table-column prop="name" label="描述" width="180">
+              </el-table-column>
+              <el-table-column prop="address" label="删除">
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                ></el-button>
+              </el-table-column>
+            </el-table>
+          </el-main>
           <el-footer>Footer</el-footer>
         </el-container>
       </el-container>
@@ -50,7 +66,8 @@ export default {
     return {
       input: ""
     };
-  }
+  },
+  methods: {}
 };
 </script>
 
@@ -88,6 +105,7 @@ export default {
   background-color: #e9eef3;
   color: #333;
   line-height: 160px;
+  padding: 0;
 }
 
 /deep/.el-container {
