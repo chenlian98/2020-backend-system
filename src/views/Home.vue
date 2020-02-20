@@ -36,14 +36,21 @@
         <el-aside width="200px">Aside</el-aside>
         <el-container>
           <el-main>
-            <el-table style="width: 100%">
-              <el-table-column prop="date" label="编号" width="180">
+            <el-table :data="articles" style="width: 100%">
+              <el-table-column prop="id" label="编号" width="180">
               </el-table-column>
-              <el-table-column prop="name" label="标题" width="180">
+              <el-table-column prop="title" label="标题" width="180">
               </el-table-column>
-              <el-table-column prop="name" label="描述" width="180">
+              <el-table-column prop="description" label="描述" width="350">
               </el-table-column>
-              <el-table-column prop="address" label="删除">
+              <el-table-column label="修改">
+                <el-button
+                  type="primary"
+                  icon="el-icon-edit"
+                  circle
+                ></el-button>
+              </el-table-column>
+              <el-table-column label="删除">
                 <el-button
                   type="danger"
                   icon="el-icon-delete"
@@ -60,14 +67,40 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import http from "axios";
 export default {
   name: "Home",
   data() {
     return {
-      input: ""
+      input: "",
+      articles: []
     };
   },
-  methods: {}
+  created() {
+    console.log(this);
+    this.getArticle();
+    console.log(this.$CONFIG);
+  },
+  methods: {
+    /*
+      2020 - 2-20 周四  get请求：下午1点30分
+    */
+    async getArticle() {
+      try {
+        this.isLoading = true;
+        const res = await http.get(`${this.$CONFIG.apiBaseUrl}/articles`);
+        this.articles = res.data;
+      } catch (e) {
+        this.$notify.error({
+          title: "错误",
+          message: "网络错误！！！"
+        });
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
 };
 </script>
 
@@ -106,6 +139,9 @@ export default {
   color: #333;
   line-height: 160px;
   padding: 0;
+  .el-table {
+    text-align: center;
+  }
 }
 
 /deep/.el-container {
