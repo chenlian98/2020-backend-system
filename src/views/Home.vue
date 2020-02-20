@@ -37,11 +37,17 @@
         <el-container>
           <el-main>
             <el-table :data="articles" style="width: 100%">
-              <el-table-column prop="id" label="编号" width="180">
-              </el-table-column>
+              <el-table-column
+                prop="id"
+                label="编号"
+                width="100"
+              ></el-table-column>
               <el-table-column prop="title" label="标题" width="180">
               </el-table-column>
               <el-table-column prop="description" label="描述" width="350">
+              </el-table-column>
+              <el-table-column label="新建">
+                <el-button type="primary" round>新建</el-button>
               </el-table-column>
               <el-table-column label="修改">
                 <el-button
@@ -51,11 +57,14 @@
                 ></el-button>
               </el-table-column>
               <el-table-column label="删除">
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  circle
-                ></el-button>
+                <template slot-scope="scope">
+                  <el-button
+                    type="danger"
+                    icon="el-icon-delete"
+                    circle
+                    @click="del(scope.row)"
+                  ></el-button>
+                </template>
               </el-table-column>
             </el-table>
           </el-main>
@@ -74,6 +83,7 @@ export default {
   data() {
     return {
       input: "",
+      activeIndex: "1",
       articles: []
     };
   },
@@ -99,6 +109,36 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    del(row) {
+      const { id } = row;
+      this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          try {
+            await http.delete(`http://localhost:3001/articles/${id}`);
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+            this.getArticle();
+          } catch (e) {
+            console.log(e);
+            this.$notify.error({
+              title: "错误",
+              message: "网络错误！！！"
+            });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   }
 };
