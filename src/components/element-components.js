@@ -25,7 +25,8 @@ import {
   Form,
   FormItem,
   aside,
-  footer
+  footer,
+  Pagination
 } from "element-ui";
 
 Vue.use(Button);
@@ -48,6 +49,7 @@ Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(aside);
 Vue.use(footer);
+Vue.use(Pagination);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;

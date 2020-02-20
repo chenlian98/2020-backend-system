@@ -15,8 +15,9 @@
           <div class="search">
             <el-input
               placeholder="请输入内容"
-              v-model="input"
+              v-model="inputName"
               class="input-with-select"
+              :fetch-suggestions="querySearch"
             >
               <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
@@ -46,27 +47,28 @@
               </el-table-column>
               <el-table-column prop="description" label="描述" width="350">
               </el-table-column>
-              <el-table-column label="新建">
+              <el-table-column label="新建" title="新建">
                 <el-button type="primary" round>新建</el-button>
               </el-table-column>
-              <el-table-column label="修改">
-                <el-button
-                  type="primary"
-                  icon="el-icon-edit"
-                  circle
-                ></el-button>
+              <el-table-column label="修改" title="修改">
+                <el-button type="primary" icon="el-icon-edit" circle
+                  >修改</el-button
+                >
               </el-table-column>
-              <el-table-column label="删除">
+              <el-table-column label="删除" title="删除">
                 <template slot-scope="scope">
                   <el-button
                     type="danger"
                     icon="el-icon-delete"
                     circle
                     @click="del(scope.row)"
-                  ></el-button>
+                    >删除</el-button
+                  >
                 </template>
               </el-table-column>
             </el-table>
+            <el-pagination background layout="prev, pager, next" :total="500">
+            </el-pagination>
           </el-main>
           <el-footer>Footer</el-footer>
         </el-container>
@@ -82,15 +84,15 @@ export default {
   name: "Home",
   data() {
     return {
-      input: "",
+      inputName: "",
       activeIndex: "1",
       articles: []
     };
   },
   created() {
-    console.log(this);
+    //console.log(this);  //VueComponent
+    //console.log(this.$CONFIG); //apiBaseUrl: "http://localhost:3001"
     this.getArticle();
-    console.log(this.$CONFIG);
   },
   methods: {
     /*
@@ -110,6 +112,7 @@ export default {
         this.isLoading = false;
       }
     },
+    /*删除功能*/
     del(row) {
       const { id } = row;
       this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
@@ -139,6 +142,10 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    /*搜索功能*/
+    querySearch() {
+      console.log(this);
     }
   }
 };
@@ -204,7 +211,7 @@ export default {
   justify-content: space-between;
   flex-grow: 1;
   & .search {
-    width: 200px;
+    width: 300px;
     margin-left: 90px;
   }
   & .user {
